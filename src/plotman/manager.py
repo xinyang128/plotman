@@ -44,8 +44,6 @@ def dstdirs_to_youngest_phase(all_jobs):
 def phases_permit_new_job(phases, d, sched_cfg, dir_cfg):
     '''Scheduling logic: return True if it's OK to start a new job on a tmp dir
        with existing jobs in the provided phases.'''
-    if psutil.cpu_percent(interval=60) > 90:
-        return False
     # Filter unknown-phase jobs
     phases = [ph for ph in phases if ph[0] is not None and ph[1] is not None]
 
@@ -70,6 +68,8 @@ def phases_permit_new_job(phases, d, sched_cfg, dir_cfg):
     return True
 
 def maybe_start_new_plot(dir_cfg, sched_cfg, plotting_cfg):
+    if psutil.cpu_percent(interval=60) > 90:
+        return (False, 'cpu busy')
     jobs = job.Job.get_running_jobs(dir_cfg.log)
 
     wait_reason = None  # If we don't start a job this iteration, this says why.
