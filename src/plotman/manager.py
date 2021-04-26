@@ -45,6 +45,9 @@ def phases_permit_new_job(phases, d, sched_cfg, dir_cfg):
     '''Scheduling logic: return True if it's OK to start a new job on a tmp dir
        with existing jobs in the provided phases.'''
     # Filter unknown-phase jobs
+    if psutil.disk_usage(d).free / 1024/1024 /1024 < 350:
+        return False
+
     phases = [ph for ph in phases if ph[0] is not None and ph[1] is not None]
 
     if len(phases) == 0:
@@ -68,7 +71,7 @@ def phases_permit_new_job(phases, d, sched_cfg, dir_cfg):
     return True
 
 def maybe_start_new_plot(dir_cfg, sched_cfg, plotting_cfg):
-    if psutil.cpu_percent(interval=60) > 90:
+    if psutil.cpu_percent(interval=10) > 90:
         return (False, 'cpu busy')
     jobs = job.Job.get_running_jobs(dir_cfg.log)
 
