@@ -44,7 +44,7 @@ def dstdirs_to_youngest_phase(all_jobs):
 def phases_permit_new_job(phases, d, sched_cfg, dir_cfg):
     '''Scheduling logic: return True if it's OK to start a new job on a tmp dir
        with existing jobs in the provided phases.'''
-    # Filter unknown-phase jobs
+    # # Filter unknown-phase jobs
     # if psutil.disk_usage(d).free / 1024/1024 /1024 < 350:
     #     return False
 
@@ -116,7 +116,7 @@ def maybe_start_new_plot(dir_cfg, sched_cfg, plotting_cfg):
                     '-u', str(plotting_cfg.n_buckets),
                     '-b', str(plotting_cfg.job_buffer),
                     '-t', tmpdir,
-                    '-d', dstdir ]
+                    '-d', tmpdir ]
             if plotting_cfg.e:
                 plot_args.append('-e')
             if plotting_cfg.farmer_pk is not None:
